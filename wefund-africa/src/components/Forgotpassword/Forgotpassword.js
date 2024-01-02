@@ -175,7 +175,7 @@ const Forgotpassword = () => {
         event.preventDefault();
     
         // let response = await fetch('http://127.0.0.1:8000/password_reset/', {
-        let response = await fetch('http://54.236.11.151:8000/password_reset/', {
+        let response = await fetch('http://54.236.11.151/password_reset/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
