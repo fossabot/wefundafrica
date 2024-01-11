@@ -35,10 +35,23 @@ function FileUpload() {
 
   const navigate = useNavigate();
   const backendRoot = 
-  // 'http://54.236.11.151';
-  "http://127.0.0.1:8000";
+  'http://54.236.11.151';
+  // "http://127.0.0.1:8000";
 
   useEffect(() => {
+
+
+
+    setFiles({});
+    setSelectedFiles(new Array(8).fill(null));
+    setUploadStatus(null);
+    setUploadProgress(0);
+    setSelectedFileIndex(null);
+    setIsFilesLoaded(false);
+    setIsLoading(true);
+
+
+
     const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
     axios
       .get(`${backendRoot}/api/read-files/`, {
@@ -48,7 +61,7 @@ function FileUpload() {
       })
       .then((response) => {
         setFiles(response.data.files);
-        // console.log("files",response.data.files)
+        console.log("files",response.data.files)
 
 
         setIsFilesLoaded(true);
@@ -62,7 +75,7 @@ function FileUpload() {
         localStorage.removeItem('userDetail');
         navigate('/login');
       });
-  }, []);
+  }, [backendRoot]);
 
   const getMatchingFiles = () => {
     const names = Object.keys(files);

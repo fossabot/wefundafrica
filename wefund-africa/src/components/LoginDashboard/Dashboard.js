@@ -88,9 +88,11 @@ const Dashboard = () => {
     useEffect(() => {
         // Simulate data loading with a timeout
         setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 2000); // Adjust the timeout duration as needed
+        // setTimeout(() => {
+        //     setIsLoading(false);
+        // }, 2000); // Adjust the timeout duration as needed
+        setIsLoading(false);
+
     }, []); // Run once on component mount
 
     return (

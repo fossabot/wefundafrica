@@ -87,7 +87,10 @@ def register_user(request):
                 # Your email-sending code here
                 # Send a welcome email to the user
                 subject = 'Welcome to WeFund'
-                from_email = 'malikkashan08@gmail.com'
+                # from_email = 'malikkashan08@gmail.com'
+                from_email = 'Funding@wefund.africa'
+                cc_email = ['hassanzamir47@gmail.com']
+                # cc_email = ['applications@wefund.africa']
                 print(from_email)
                 to_email = [email]
 
@@ -99,7 +102,8 @@ def register_user(request):
                     subject,
                     plain_message,
                     from_email,
-                    to_email
+                    to_email,
+                    cc=cc_email
                 )
                 msg.attach_alternative(message, "text/html")
                 msg.send()
@@ -141,117 +145,12 @@ def register_user(request):
 
 
 
-
-# @api_view(['POST'])
-# def register_user(request):
-#     if request.method == 'POST':
-#         serializer = UserRegistrationSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user_data = serializer.validated_data
-#             username = user_data['username']
-#             email = user_data['email']
-#             password = user_data['password']
-
-#             # Create the user without the image field for now
-#             user = CustomUser.objects.create_user(
-#                 username=username,
-#                 email=email,
-#                 password=password,
-#                 phone_number=user_data.get('phone_number', ''),
-#                 first_name=user_data.get('first_name', ''),
-#                 last_name=user_data.get('last_name', ''),
-#             )
-
-#             # Do not upload the image during user registration, set image to null
-#             user.image = None
-#             user.save()
-
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this API
 def get_user_details(request):
     user = request.user  # Get the authenticated user
     serializer = CustomUserSerializer(user)
     return Response(serializer.data)
-
-
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])  
-# def update_user_details(request):
-#     user = request.user
-
-#     serializer = CustomUserSerializer(user, data=request.data, partial=True)
-
-#     if serializer.is_valid():
-#         serializer.save()  # Save the updated user details
-#         return Response(serializer.data)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])  
-# def update_user_details(request):
-#     user = request.user
-
-#     serializer = CustomUserSerializer(user, data=request.data, partial=True)
-
-#     if serializer.is_valid():
-#         # Save the updated user details
-#         user = serializer.save()
-
-#         # Upload the image to S3 if provided
-#         image = request.data.get('image')
-#         if image:
-#             s3 = boto3.client(
-#                 's3',
-#                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-#                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
-#             )
-#             bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-#             folder_key = f"user_folders/{user.username}/images/"
-
-#             try:
-#                 s3.head_object(Bucket=bucket_name, Key=folder_key)
-#             except Exception as e:
-#                 # The folder doesn't exist, create it
-#                 s3.put_object(Bucket=bucket_name, Key=folder_key)
-
-#             image_name = image.name.replace('.', '_')
-#             image_key = f"user_folders/{user.username}/images/profile_image_{user.id}_{image_name}"
-
-#             # Save the uploaded file to a temporary file on disk
-#             with NamedTemporaryFile(delete=True) as temp_file:
-#                 temp_file.write(image.read())
-#                 temp_file.seek(0)  # Reset the file position to the beginning
-
-#                 # Upload the file from the temporary file to S3
-#                 s3.upload_file(temp_file.name, bucket_name, image_key)
-
-#             # Update the user's image field with the S3 URL
-#             user.image = f"{bucket_name}/{image_key}"
-#             user.save()
-
-#         return Response(serializer.data)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
@@ -311,46 +210,6 @@ def update_user_details(request):
 import io
 import boto3
 from botocore.exceptions import NoCredentialsError
-
-# def upload_to_s3(file, file_name):
-#     s3 = boto3.client('s3')
-#     try:
-#         s3.upload_fileobj(file, 'your-s3-bucket-name', file_name)
-#         return True
-#     except NoCredentialsError:
-#         return False
-
-
-
-
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])  
-# def FileUploadView(request, format=None):
-#     try:
-#         user = request.user
-#         session_s3 = boto3.session.Session(region_name='us-east-1',
-#                                     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-#                                     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-#         s3 = session_s3.client('s3')
-#         for index, uploaded_file in enumerate(request.FILES.values()):
-#             file_extension = uploaded_file.name.split('.')[-1]
-
-#             # file_name = f"user_folders/{user.username}/file_{index}.{file_extension}"
-#             custom_filename = request.POST.get(f'filename{index}')
-#             file_name = f"user_folders/{user.username}/{custom_filename}.{file_extension}"
-            # file_name = f"user_folders/{user.username}/{key}.{file_extension}"
-
-#             # Upload the binary data to S3
-#             s3.upload_fileobj(uploaded_file, settings.AWS_STORAGE_BUCKET_NAME, file_name)
-
-#         return Response({"message": "Files uploaded successfully"}, status=status.HTTP_201_CREATED)
-
-#     except NoCredentialsError:
-#         return Response({"message": "AWS credentials are not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#     except Exception as e:
-#         print(str(e))
-#         return Response({"message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 from botocore.exceptions import ClientError
 
 @api_view(['POST'])
