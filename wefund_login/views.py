@@ -88,7 +88,7 @@ def register_user(request):
                 # Send a welcome email to the user
                 subject = 'Welcome to WeFund'
                 # from_email = 'malikkashan08@gmail.com'
-                from_email = '# Afrihost config - Local'
+                from_email = 'Funding@wefund.africa'
                 print(from_email)
                 to_email = [email]
                 # cc_email = ['hassanzamir47@gmail.com']
