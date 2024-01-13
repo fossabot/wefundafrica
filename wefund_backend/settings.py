@@ -248,14 +248,13 @@ STATICFILES_DIRS = (
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
-EMAIL_PORT = 587  # Replace with your email port
-EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
-EMAIL_HOST_USER = 'malikkashan08@gmail.com'  # Replace with your email username
-EMAIL_HOST_PASSWORD = 'lylw avhz wquj vzzm'  # Replace with your email password
-
+# # Gmail
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
+# EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
+# EMAIL_PORT = 587  # Replace with your email port
+# EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
+# EMAIL_HOST_USER = 'malikkashan08@gmail.com'  # Replace with your email username
+# EMAIL_HOST_PASSWORD = 'lylw avhz wquj vzzm'  # Replace with your email password
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
 # EMAIL_HOST = 'smtp.afrihost.co.za'
@@ -265,5 +264,24 @@ EMAIL_HOST_PASSWORD = 'lylw avhz wquj vzzm'  # Replace with your email password
 # EMAIL_HOST_USER = 'Funding@wefund.africa'
 # EMAIL_HOST_PASSWORD = 'FuND!nG@2k23!'
 
-
 # APPEND_SLASH=False
+
+# # Afrihost config - Local
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
+# # EMAIL_HOST = 'smtp.afrihost.co.za'
+# EMAIL_HOST = 'mail.wefund.africa'
+# EMAIL_PORT = 25
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = 'Funding@wefund.africa'
+# EMAIL_HOST_PASSWORD = 'FuND!nG@2k23!'
+
+# Afrihost config - AWS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
+# EMAIL_HOST = 'smtp.afrihost.co.za'
+EMAIL_HOST = 'mail.wefund.africa'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'Funding@wefund.africa'
+EMAIL_HOST_PASSWORD = 'FuND!nG@2k23!'

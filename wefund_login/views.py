@@ -87,9 +87,12 @@ def register_user(request):
                 # Your email-sending code here
                 # Send a welcome email to the user
                 subject = 'Welcome to WeFund'
-                from_email = 'malikkashan08@gmail.com'
+                # from_email = 'malikkashan08@gmail.com'
+                from_email = '# Afrihost config - Local'
                 print(from_email)
                 to_email = [email]
+                # cc_email = ['hassanzamir47@gmail.com']
+                cc_email = ['applications@wefund.africa']
 
                 # You can customize the welcome message in the template
                 message = render_to_string('welcome_email_template.html', {'username': username})
@@ -99,7 +102,8 @@ def register_user(request):
                     subject,
                     plain_message,
                     from_email,
-                    to_email
+                    to_email,
+                    cc=cc_email
                 )
                 msg.attach_alternative(message, "text/html")
                 msg.send()
