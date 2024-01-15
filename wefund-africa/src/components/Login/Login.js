@@ -15,6 +15,9 @@ const LoginPage = () => {
     const forgothandle = () => {
         navigate('/forgot')
     }
+    const signup = () => {
+        navigate('/register')
+    }
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -45,8 +48,10 @@ const LoginPage = () => {
         {/* {authloader ? <span id="authloader"></span> : <>LOGIN</>} */}
         Login
         </button>
-        <div className="forget_password" onClick={forgothandle}><span>Forget Password</span></div>
-
+        <div className="signup_forgot">
+        <div className="sign_up" onClick={signup}><span>Sign Up</span></div>
+        <div className="forget_password" onClick={forgothandle}><span>Forgot Password</span></div>
+        </div>
     </form>
     </div>
     </div>

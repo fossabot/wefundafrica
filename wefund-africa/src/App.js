@@ -12,6 +12,7 @@ import Lender from "./components/Lenders/Lender";
 import Products from "./components/Products/Product";
 import Forgotpassword from "./components/Forgotpassword/Forgotpassword";
 import Passwordreset from "./components/Passwordreset/Passwordreset";
+import PrivacyPage from "./components/PrivacyPage/PrivacyPage";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/lenders" element={<Lender />} />
         <Route path="/products" element={<Products />} />
         <Route path="/process" element={<Process />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/register" element={<ApplyNow />} />
         {/* Define your public routes */}
         <Route path="/login" element={<LoginPage />} />

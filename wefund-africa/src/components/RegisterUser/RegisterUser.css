@@ -1,8 +1,5 @@
 .inputbox {
     display: flex;
-    margin: 10px 20px;
-    position: relative;
-    width: 400px;
 }
 
 .inputbox input {
@@ -49,9 +46,43 @@ input:-webkit-autofill {
     border: 1px solid #3AA641;
 }
 
-/* .inputbox .choose_image {
+.checkbox_label label {
+    color: #3AA641;
+    text-decoration: #3AA641;
+}
+.username_email,
+.passwords,
+.first_last,
+.phone_year {
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    margin-right: auto;
-} */
+}
+.email_margin, 
+.password_margin, 
+.lastname_margin, 
+.year_margin {
+    padding: 0 0 0 15px;
+}
+.register_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login_register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0 0 0;
+}
+.login_register span {
+    font-family: "Helvetica Neue", Roboto, Arial, Sans-Serif, serif;
+    cursor: pointer;
+    color: #D0D9F6;
+}
+.login_register span:hover {
+    color: #3AA641;
+}
+.password_error {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}

@@ -58,6 +58,8 @@ const Footer = () => {
             <a onClick={() => navigate('/products')}>Products</a>
             <a onClick={() => navigate("/process")}>Process</a>
             <a  onClick={handleLogin}>Log In</a>
+            <a  onClick={() => navigate("/privacy")}>Privacy Policy</a>
+
           </div>
         </div>
 
@@ -83,7 +85,7 @@ const Footer = () => {
           Matoto Technologies
         </div> */}
         <div className="footer_title">
-        <a href="https://www.freshfarms.co.za/">Copyright © 2021 Member of Matoto Group Of Companies | 
+        <a href="https://www.matoto.co.za/">Copyright © 2021 Member of Matoto Group Of Companies | 
           Powered by Matoto Technologies</a>
         </div>
       </div>

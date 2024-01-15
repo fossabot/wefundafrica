@@ -73,6 +73,8 @@ export const Provider = ({ children }) => {
           first_name: data.first_name,
           last_name: data.last_name,
           image: data.image,
+          po_value: data.po_value,
+          supplier_quote: data.supplier_quote,
           years_in_business: data.years_in_business,
           monthly_revenue: data.monthly_revenue,
         });

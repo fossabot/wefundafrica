@@ -23,6 +23,8 @@ const UserProfile = () => {
         first_name: userDetail.first_name,
         last_name: userDetail.last_name,
         image: userDetail.image,
+        po_value: userDetail.po_value,
+        supplier_quote: userDetail.supplier_quote,
         years_in_business: userDetail.years_in_business,
         monthly_revenue: userDetail.monthly_revenue || "0",
     });
@@ -43,12 +45,12 @@ const UserProfile = () => {
     const backendRoot =
     "http://54.236.11.151";
     // "http://127.0.0.1:8000";
+    const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
     const handleUpdateProfile = async () => {
         if (!profileFieldsChanged) {
             console.log("No profile fields have been changed.");
             return;
         }
-        const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
         console.log("updateuserdetail:", updatedUserDetail)
 
         try {
@@ -86,12 +88,14 @@ const UserProfile = () => {
     };
 
     useEffect(() => {
-        const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
+        // const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
+        console.log(accessToken)
+        console.log(userDetail)
         axios
         .get(`${backendRoot}/retrieve_image/${userDetail.username}/`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+            // headers: {
+            //     Authorization: `Bearer ${accessToken}`,
+            // },
         })
         .then((response) => {
             const imageBase64Data = response.data.images;
@@ -110,6 +114,30 @@ const UserProfile = () => {
             navigate('/login');
         });
     }, []);
+
+
+    // const [imageBase64Data, setImageBase64Data] = useState({});
+// const backendRoot = "http://127.0.0.1:8000";
+
+    // useEffect(() => {
+    //     const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
+    //     axios
+    //         .get(`${backendRoot}/retrieve_image/${userDetail.username}/`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`,
+    //             },
+    //         })
+    //         .then((response) => {
+    //             setImageBase64Data(response.data.images);
+    //             setIsLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching files:', error);
+    //             localStorage.removeItem('authTokens');
+    //             localStorage.removeItem('userDetail');
+    //             navigate('/login');
+    //         });
+    // }, []);
 
 
     const [authLoader, setAuthLoader] = useState(false);
@@ -273,6 +301,25 @@ return (
                         />
                     </div>
                     <div className="text_input">
+                        <span>PO Value</span>
+                        <input
+                        type="number"
+                        name="po_value"
+                        value={updatedUserDetail.po_value}
+                        onChange={handleInputChange}
+                        />
+                    </div>
+
+                    <div className="text_input">
+                        <span>Supplier Quote</span>
+                        <input
+                        type="text"
+                        name="supplier_quote"
+                        value={updatedUserDetail.supplier_quote}
+                        onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="text_input">
                         <span>Monthly Revenue</span>
 
                         <select
@@ -280,12 +327,10 @@ return (
                         value={updatedUserDetail.monthly_revenue}
                         onChange={handleInputChange}
                         >
-                        <option value="0">0 - 42,000</option>
-                        <option value="1">42,001 - 83,000</option>
-                        <option value="2">83,001 - 167,000</option>
-                        <option value="3">167,001 - 417,000</option>
-                        <option value="4">417,001 - 833,000</option>
-                        <option value="5">833,001 - 1,700,000</option>
+                        <option value="0">0 - 50k</option>
+                        <option value="1">50k - 100k</option>
+                        <option value="2">100k - 150k</option>
+                        <option value="3">150k +</option>
                         </select>
                     </div>
                         
