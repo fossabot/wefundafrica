@@ -35,6 +35,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['last_name'] = user.last_name
         data['years_in_business'] = user.years_in_business
         data['monthly_revenue'] = user.monthly_revenue
+        data['po_value'] = user.po_value
+        data['supplier_quote'] = user.supplier_quote
 
         # data['image'] = user.image.url
         # print(user.image.url)
@@ -66,6 +68,13 @@ def getRoutes(request):
 def register_user(request):
     if request.method == 'POST':
         serializer = UserRegistrationSerializer(data=request.data)
+
+        if 'password' in request.data and 'confirm_password' in request.data:
+            if request.data['password'] != request.data['confirm_password']:
+                return Response({'error': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
         if serializer.is_valid():
             user_data = serializer.validated_data
             username = user_data['username']
@@ -80,6 +89,10 @@ def register_user(request):
                 phone_number=user_data.get('phone_number', ''),
                 first_name=user_data.get('first_name', ''),
                 last_name=user_data.get('last_name', ''),
+                po_value=user_data.get('po_value', ''),
+                supplier_quote=user_data.get('supplier_quote', ''),
+                monthly_revenue=user_data.get('monthly_revenue', ''),
+
             )
 
             try:
@@ -593,9 +606,8 @@ from .serializers import ImageSerializer
 
 from botocore.exceptions import NoCredentialsError
 
-# ... other imports ...
-
 class RetrieveImageView(APIView):
+    # @permission_classes({IsAuthenticated})
     def get(self, request, username):
         try:
             # Initialize the AWS S3 session and client

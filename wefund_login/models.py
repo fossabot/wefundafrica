@@ -39,16 +39,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    years_in_business = models.PositiveIntegerField(default=0)
+    years_in_business = models.CharField(max_length=3, blank=True)
+
+    po_value = models.CharField(max_length=30, blank=True)
+    supplier_quote = models.CharField(max_length=30, blank=True)
+
 
 
     MONTHLY_REVENUE_CHOICES = [
-        (0, '0 - 42,000'),
-        (1, '42,001 - 83,000'),
-        (2, '83,001 - 167,000'),
-        (3, '167,001 - 417,000'),
-        (4, '417,001 - 833,000'),
-        (5, '833,001 - 1,700,000'),
+        (0, '0 - 50k'),
+        (1, '50k - 100k'),
+        (2, '100k - 150k'),
+        (3, '150k +'),
     ]
     
     monthly_revenue = models.PositiveIntegerField(choices=MONTHLY_REVENUE_CHOICES, default=0)
