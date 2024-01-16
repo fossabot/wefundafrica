@@ -99,7 +99,7 @@ def register_user(request):
                 print("Before sending email") 
                 # Your email-sending code here
                 # Send a welcome email to the user
-                subject = 'Welcome to WeFund'
+                subject = 'Welcome to WeFund Africa - Your Partner in Business Funding!'
                 # from_email = 'malikkashan08@gmail.com'
                 from_email = 'Funding@wefund.africa'
                 print(from_email)
