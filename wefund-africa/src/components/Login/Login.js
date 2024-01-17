@@ -25,8 +25,8 @@ const LoginPage = () => {
 
     return (
     <div className="Homepage_master_div">
-        <div>
-        <StaticNavBar />
+        <div className="static-nav-bar">
+            <StaticNavBar />
         </div>    
     <div className="login_background_picture"></div>
         <div className="navbar_homepage">

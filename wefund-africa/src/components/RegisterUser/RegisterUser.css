@@ -86,3 +86,36 @@ input:-webkit-autofill {
     flex-direction: column;
     width: 400px;
 }
+.password-strength-error {
+    color: rgb(241, 29, 29);
+}
+.password-match-error {
+    color: rgb(241, 29, 29);
+}
+
+
+@media (max-width: 500px) {
+    .inputbox {
+        display: flex;
+        flex-direction: column;
+    }
+    .username_email,
+    .passwords,
+    .first_last,
+    .phone_year {
+        display: flex;
+        flex-direction: column;
+    }
+    .email_margin, 
+    .password_margin, 
+    .lastname_margin, 
+    .year_margin {
+        padding: 0;
+    }
+    .monthly_text {
+        display: flex;
+        margin-left: auto;
+    }
+}
+
+

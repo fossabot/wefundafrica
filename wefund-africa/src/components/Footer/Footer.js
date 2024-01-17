@@ -36,7 +36,7 @@ const Footer = () => {
             <p>WeFund Africa</p>
           </div>
           <div className="footer_number">
-            <span>0860 767 067</span>
+            <span>0860 767 069</span>
           </div>
           <div className="footer_email">
             <span>info@wefund.africa</span>
@@ -85,8 +85,8 @@ const Footer = () => {
           Matoto Technologies
         </div> */}
         <div className="footer_title">
-        <a href="https://www.matoto.co.za/">Copyright © 2021 Member of Matoto Group Of Companies | 
-          Powered by Matoto Technologies</a>
+        <a href="https://www.matotogroup.co.za/">Copyright © 2021 Member of Matoto Group Of Companies </a>| 
+        <a href="https://www.matoto.co.za/">Powered by Matoto Technologies</a>
         </div>
       </div>
     </div>

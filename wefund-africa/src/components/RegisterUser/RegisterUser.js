@@ -96,7 +96,7 @@ const ApplyNow = () => {
 
   return (
     <div className="Homepage_master_div">
-      <div>
+      <div className="static-nav-bar">
         <StaticNavBar />
       </div>
       <div className="login_background_picture"></div>
