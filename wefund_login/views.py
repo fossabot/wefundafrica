@@ -25,6 +25,7 @@ from botocore.exceptions import NoCredentialsError
 from botocore.exceptions import ClientError
 from .serializers import ImageSerializer
 from botocore.exceptions import NoCredentialsError
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -86,13 +87,22 @@ def register_user(request):
             user_data = serializer.validated_data
             username = user_data['username']
             email = user_data['email']
-            password = user_data['password']
+
+
+            if CustomUser.objects.filter(username=username).exists():
+                return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if CustomUser.objects.filter(email=email).exists():
+                return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # password = user_data['password']
 
             # Create the user without the image field for now
             user = CustomUser.objects.create_user(
                 username=username,
                 email=email,
-                password=password,
+                # password=password,
+                password = user_data['password'],
                 phone_number=user_data.get('phone_number', ''),
                 first_name=user_data.get('first_name', ''),
                 last_name=user_data.get('last_name', ''),
@@ -100,6 +110,35 @@ def register_user(request):
                 supplier_quote=user_data.get('supplier_quote', ''),
                 monthly_revenue=user_data.get('monthly_revenue', ''),
             )
+
+            try:
+                session_s3 = boto3.session.Session(
+                    region_name='us-east-1',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                )
+                s3 = session_s3.client('s3')
+
+                # Check if the bucket exists
+                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                try:
+                    s3.head_bucket(Bucket=bucket_name)
+                except s3.exceptions.ClientError as e:
+                    if e.response['Error']['Code'] == 'NoSuchBucket':
+                        # The bucket doesn't exist, create it
+                        s3.create_bucket(Bucket=bucket_name)
+
+                # Check if the folder exists
+                folder_key = f"user_folders/{username}/"
+                try:
+                    s3.head_object(Bucket=bucket_name, Key=folder_key)
+                except s3.exceptions.ClientError as e:
+                    if e.response['Error']['Code'] == '404':
+                        # The folder doesn't exist, create it
+                        s3.put_object(Bucket=bucket_name, Key=folder_key, Body='')
+
+            except Exception as e:
+                print(f"Error creating S3 folder: {e}")
 
             try:
                 print("Before sending email") 

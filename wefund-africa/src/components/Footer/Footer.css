@@ -141,6 +141,20 @@
         align-items: center;
         justify-content: center;
     }
+
+    .copyright_links {
+        text-decoration: none;
+        color: #5E5E5E;
+        font-weight: 700;
+    }
+    
+    .footer_title div {
+        margin-right: 10px; /* Adjust the value to control the space after "Member of" */
+    }
+    
+    .footer_title a{
+        margin-left: 5px; /* Adjust the value to control the space before "Powered by" */
+    }
 }
 
 
@@ -296,6 +310,9 @@
         align-items: center;
         justify-content: center;
     }
+    .copyright_links {
+        text-decoration: none;
+    }
 }
 
 
@@ -446,5 +463,9 @@
         width: 100%;
         align-items: center;
         justify-content: center;
+    }
+    .copyright_links {
+        text-decoration: none;
+        color: #5E5E5E !important;
     }
 }

@@ -49,8 +49,6 @@ function FileUpload() {
       .then((response) => {
         setFiles(response.data.files);
         // console.log("files",response.data.files)
-
-
         setIsFilesLoaded(true);
         setIsLoading(false);
         console.log("User Detail:", JSON.parse(localStorage.getItem('userDetail')));

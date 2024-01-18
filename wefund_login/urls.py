@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 from .views import MyTokenObtainPairView, register_user, update_user_details, FileUploadView, RetrieveImageView
 from .views import change_password, image_upload
+from django.contrib.auth import views as auth_views
 
 
 from rest_framework_simplejwt.views import (
@@ -32,8 +33,10 @@ urlpatterns = [
 
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
-
-
+    # path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    # path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    # path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    # path('password_reset_complete', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 
 ]

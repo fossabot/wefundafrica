@@ -84,9 +84,26 @@ const Footer = () => {
           Copyright © 2021 Member of Matoto Group Of Companies | Powered by
           Matoto Technologies
         </div> */}
+        {/* <div className="footer_title">
+        <a className="copyright_links" href="https://www.matotogroup.co.za/">Copyright © 2021 Member of Matoto Group Of Companies  <span> </span></a>| 
+        <a className="copyright_links" href="https://www.matoto.co.za/">Powered by Matoto Technologies</a>
+        </div> */}
+        {/* <div className="footer_title">
+          Copyright © 2021 Member of 
+          <div>
+            <a className="copyright_links" href="https://www.matotogroup.co.za/">Matoto Group Of Companies</a>
+          </div>
+          | 
+          Powered by <a className="copyright_links" href="https://www.matoto.co.za/">Matoto Technologies</a>
+        </div> */}
+
         <div className="footer_title">
-        <a href="https://www.matotogroup.co.za/">Copyright © 2021 Member of Matoto Group Of Companies </a>| 
-        <a href="https://www.matoto.co.za/">Powered by Matoto Technologies</a>
+            Copyright © 2021 Member of 
+            <div>
+                <a className="copyright_links" href="https://www.matotogroup.co.za/">Matoto Group Of Companies</a>
+            </div>
+            | 
+            Powered by <a className="copyright_links" href="https://www.matoto.co.za/">Matoto Technologies</a>
         </div>
       </div>
     </div>

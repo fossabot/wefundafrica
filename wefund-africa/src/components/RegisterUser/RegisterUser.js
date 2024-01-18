@@ -5,6 +5,7 @@ import StaticNavBar from "../StaticNavBar/StaticNavBar";
 import AppContext from "../utils/AppContext";
 import { useNavigate } from "react-router-dom";
 import "./RegisterUser.css"
+import { MdDoDisturbOff } from "react-icons/md";
 
 const ApplyNow = () => {
 
@@ -15,6 +16,9 @@ const ApplyNow = () => {
   const [passwordStrengthError, setPasswordStrengthError] = useState("");
 
   const [passwordMatchError, setPasswordMatchError] = useState("");
+
+  const [emailError, setEmailError] = useState("");
+
 
   
   let navigate = useNavigate();
@@ -27,9 +31,6 @@ const ApplyNow = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (!authLoader) {
-    //   setAuthLoader(true);
 
     if (!authLoader && !passwordMatchError) {
       setAuthLoader(true);
@@ -56,7 +57,6 @@ const ApplyNow = () => {
     }
   };
 
-
   const handlePasswordChange = (e) => {
     const password = e.target.value;
 
@@ -79,7 +79,6 @@ const ApplyNow = () => {
       setPasswordMatchError("");
     }
   };
-
 
   const handleConfirmPasswordChange = (e) => {
     const confirm_password = e.target.value;
@@ -115,9 +114,12 @@ const ApplyNow = () => {
               </div>
               <div className="email_margin">
                 <div className="inputbox">
-                  <input name="email" type="email" required="required" />
+                  <input name="email" type="email" required="required" onChange={() => setEmailError("")} />
                   <span>Email</span>
                 </div>
+                {emailError && (
+                  <div className="email-error">{emailError}</div>
+                )}
               </div>
           </div>
           <div className="passwords">
