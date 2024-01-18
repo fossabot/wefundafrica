@@ -136,6 +136,14 @@ def register_user(request):
                     if e.response['Error']['Code'] == '404':
                         # The folder doesn't exist, create it
                         s3.put_object(Bucket=bucket_name, Key=folder_key, Body='')
+                
+                images_folder_key = f"user_folders/{username}/images/"
+                try:
+                    s3.head_object(Bucket=bucket_name, Key=images_folder_key)
+                except ClientError as e:
+                    if e.response['Error']['Code'] == '404':
+                        # The 'images' folder doesn't exist, create it
+                        s3.put_object(Bucket=bucket_name, Key=images_folder_key, Body='')
 
             except Exception as e:
                 print(f"Error creating S3 folder: {e}")
@@ -196,6 +204,7 @@ def register_user(request):
 
                 # Update the user's image field with the S3 URL
                 user.image = f"{bucket_name}/{image_key}"
+
                 user.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
