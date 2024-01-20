@@ -23,13 +23,13 @@ function FileUpload() {
 
 
   const customFilenames = [
-    'Director ID documents',
-    '3 to 6 months bank statements',
-    'PO document',
+    'Director ID Documents',
+    '3 to 6 Months Bank Statements',
+    'PO Document',
     'CSD Registration Document',
-    'Business Registration document',
+    'Business Registration Document',
     'Tax Clearance Certificate',
-    'Supplier invoice',
+    'Supplier Invoice',
     'Supporting Documents',
   ];
 
