@@ -13,6 +13,8 @@ import Products from "./components/Products/Product";
 import Forgotpassword from "./components/Forgotpassword/Forgotpassword";
 import Passwordreset from "./components/Passwordreset/Passwordreset";
 import PrivacyPage from "./components/PrivacyPage/PrivacyPage";
+import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
+import UserDetails from "./components/AdminDashboard/UserDetails";
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
 
         
         <Route element={ <PrivateRoutes /> } >
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/user-details/:id" element={<UserDetails />} />
           <Route path="/user/dashboard" element={<Dashboard />} />
           <Route path="/user/profile" element={<UserProfile />} />
 

@@ -77,6 +77,8 @@ export const Provider = ({ children }) => {
           supplier_quote: data.supplier_quote,
           years_in_business: data.years_in_business,
           monthly_revenue: data.monthly_revenue,
+          status: data.status,
+          is_admin: data.is_admin,
         });
         
         localStorage.setItem("authTokens", JSON.stringify(tokensToStore));

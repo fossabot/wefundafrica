@@ -59,6 +59,20 @@
         font-size: 14px;
         font-weight: 550;
         margin-bottom: 10px;
+    
+        &.status-in-progress {
+            background-color: yellow;
+            border-radius: 8px;
+            padding: 2px;
+        }
+        
+        &.status-incomplete {
+            background-color: red;
+        }
+        
+        &.status-complete {
+            background-color: green;
+        }
     }
 
 

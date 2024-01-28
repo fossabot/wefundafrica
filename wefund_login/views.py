@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -28,6 +28,9 @@ from botocore.exceptions import NoCredentialsError
 from django.core.exceptions import ObjectDoesNotExist
 
 
+from rest_framework.permissions import AllowAny
+
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -45,6 +48,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['monthly_revenue'] = user.monthly_revenue
         data['po_value'] = user.po_value
         data['supplier_quote'] = user.supplier_quote
+
+        data['is_admin'] = user.is_admin
+
+        data['status'] = user.status
 
         # data['image'] = user.image.url
         # print(user.image.url)
@@ -71,7 +78,7 @@ def getRoutes(request):
     return Response(routes)
 
 
-
+@permission_classes([AllowAny])
 @api_view(['POST'])
 def register_user(request):
     if request.method == 'POST':
@@ -87,6 +94,7 @@ def register_user(request):
             user_data = serializer.validated_data
             username = user_data['username']
             email = user_data['email']
+            # is_admin = user_data.get('is_admin', False)
 
 
             if CustomUser.objects.filter(username=username).exists():
@@ -103,12 +111,17 @@ def register_user(request):
                 email=email,
                 # password=password,
                 password = user_data['password'],
+
+                # is_admin=is_admin,
+
                 phone_number=user_data.get('phone_number', ''),
                 first_name=user_data.get('first_name', ''),
                 last_name=user_data.get('last_name', ''),
+                years_in_business=user_data.get('years_in_business'),
                 po_value=user_data.get('po_value', ''),
                 supplier_quote=user_data.get('supplier_quote', ''),
                 monthly_revenue=user_data.get('monthly_revenue', ''),
+                status='In Progress'  # Set the default status
             )
 
             try:
@@ -479,3 +492,364 @@ def change_password(request):
             return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+
+
+
+
+
+
+
+# from rest_framework.permissions import IsAuthenticated
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def AdminUserDetailsView(request, format=None):
+#     try:
+#         # Check if the user making the request is an administrator
+#         if request.user.is_admin:
+#             # Fetch all users
+#             users = CustomUser.objects.all()
+#             print(users)
+
+#             # Serialize the user details
+#             serializer = CustomUserSerializer(users, many=True)
+            
+#             print(request.user.is_admin)
+
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#             print(users)
+
+#         else:
+#             return Response({"message": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+#     except Exception as e:
+#         return Response({"message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def AdminUserDetailsView(request, format=None):
+#     try:
+
+#         session_s3 = boto3.session.Session(
+#                 region_name='us-east-1',
+#                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+#                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+#             )
+#         s3 = session_s3.client('s3')
+#         # Check if the user making the request is an administrator
+#         if request.user.is_admin:
+#             # Fetch all users
+#             users = CustomUser.objects.all()
+
+#             # Serialize the user details
+#             serializer = CustomUserSerializer(users, many=True)
+
+#             # Initialize a dictionary to store file content for all users
+#             all_file_contents = {}
+
+#             # Loop through each user to retrieve their uploaded files
+#             for user in users:
+#                 user_folder_prefix = f"user_folders/{user.username}/"
+#                 response = s3.list_objects_v2(
+#                     Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+#                     Prefix=user_folder_prefix
+#                 )
+
+#                 # Extract file names from the response
+#                 file_names = [obj['Key'].replace(user_folder_prefix, '') for obj in response.get('Contents', [])]
+
+#                 # Filter out empty strings
+#                 file_names = [file_name for file_name in file_names if file_name]
+
+#                 # Retrieve and read each file
+#                 file_contents = {}
+#                 for file_name in file_names:
+#                     file_key = f"{user_folder_prefix}{file_name}"
+#                     try:
+#                         # Get the file content from S3 as bytes
+#                         file_obj = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=file_key)
+#                         file_content = file_obj['Body'].read()
+#                         # Encode the file content in base64
+#                         file_content_base64 = base64.b64encode(file_content).decode('utf-8')
+#                         file_contents[file_name] = file_content_base64
+#                     except Exception as e:
+#                         # Handle any errors that occur while reading the file
+#                         return Response({"message": f"An error occurred while reading '{file_name}': {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#                 # Add the file contents to the dictionary for all users
+#                 all_file_contents[user.username] = file_contents
+
+#             # Add the file contents to the serialized user data
+#             for user_data in serializer.data:
+#                 username = user_data['username']
+#                 user_data['uploaded_files'] = all_file_contents.get(username, {})
+
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+#         else:
+#             return Response({"message": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+#     except NoCredentialsError:
+#         return Response({"message": "AWS credentials are not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#     except Exception as e:
+#         return Response({"message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def AdminUserDetailsView(request, format=None):
+    try:
+        session_s3 = boto3.session.Session(
+            region_name='us-east-1',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+        )
+        s3 = session_s3.client('s3')
+
+        # Check if the user making the request is an administrator
+        if request.user.is_admin:
+
+
+            if request.method == 'PUT':
+                # Update the status field for a user
+                username = request.data.get('username')
+                new_status = request.data.get('new_status')
+
+                if username and new_status:
+                    try:
+                        user = CustomUser.objects.get(username=username)
+                        user.status = new_status
+                        user.save()
+                        return Response({"message": f"Status for user '{username}' updated successfully"}, status=status.HTTP_200_OK)
+                    except CustomUser.DoesNotExist:
+                        return Response({"message": f"User with username '{username}' not found"}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({"message": "Both 'username' and 'new_status' are required in the request data for status update"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                
+            # Fetch all users
+            users = CustomUser.objects.all()
+
+            # Serialize the user details
+            serializer = CustomUserSerializer(users, many=True)
+
+            # Initialize dictionaries to store file content for documents and profile pictures
+            all_document_contents = {}
+            all_profile_picture_contents = {}
+
+            # Loop through each user to retrieve their uploaded files
+            for user in users:
+                user_folder_prefix = f"user_folders/{user.username}/"
+                document_folder_prefix = f"{user_folder_prefix}"
+                image_folder_prefix = f"{user_folder_prefix}images/"
+
+                # Retrieve documents
+                document_contents = {}
+                document_response = s3.list_objects_v2(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                    Prefix=document_folder_prefix
+                )
+                document_file_names = [obj['Key'].replace(document_folder_prefix, '') for obj in document_response.get('Contents', [])]
+                document_file_names = [file_name for file_name in document_file_names if file_name and not file_name.startswith('images/')]
+                for document_name in document_file_names:
+                    document_key = f"{document_folder_prefix}{document_name}"
+                    try:
+                        document_obj = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=document_key)
+                        document_content = document_obj['Body'].read()
+                        document_content_base64 = base64.b64encode(document_content).decode('utf-8')
+                        document_contents[document_name] = document_content_base64
+                    except Exception as e:
+                        return Response({"message": f"An error occurred while reading '{document_name}': {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                # Retrieve profile pictures
+                profile_picture_contents = {}
+                image_response = s3.list_objects_v2(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                    Prefix=image_folder_prefix
+                )
+                image_file_names = [obj['Key'].replace(image_folder_prefix, '') for obj in image_response.get('Contents', [])]
+                image_file_names = [file_name for file_name in image_file_names if file_name]
+                for image_name in image_file_names:
+                    image_key = f"{image_folder_prefix}{image_name}"
+                    try:
+                        image_obj = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=image_key)
+                        image_content = image_obj['Body'].read()
+                        image_content_base64 = base64.b64encode(image_content).decode('utf-8')
+                        profile_picture_contents[image_name] = image_content_base64
+                    except Exception as e:
+                        return Response({"message": f"An error occurred while reading '{image_name}': {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                # Add the file contents to the dictionaries for all users
+                all_document_contents[user.username] = document_contents
+                all_profile_picture_contents[user.username] = profile_picture_contents
+
+            # Add the file contents to the serialized user data
+            for user_data in serializer.data:
+                username = user_data['username']
+                user_data['uploaded_files'] = {
+                    'uploaded_documents': all_document_contents.get(username, {}),
+                    'profile_pictures': all_profile_picture_contents.get(username, {}),
+                }
+
+                username = user_data['username']
+                user_data['status'] = CustomUser.objects.get(username=username).status
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"message": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+    except NoCredentialsError:
+        return Response({"message": "AWS credentials are not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        return Response({"message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+@api_view(['POST'])
+def adminapply(request):
+    if request.method == 'POST':
+        serializer = UserRegistrationSerializer(data=request.data)
+
+        if 'password' in request.data and 'confirm_password' in request.data:
+            if request.data['password'] != request.data['confirm_password']:
+                return Response({'error': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if serializer.is_valid():
+            user_data = serializer.validated_data
+            username = user_data['username']
+            email = user_data['email']
+            is_admin = user_data.get('is_admin', True)
+
+            if CustomUser.objects.filter(username=username).exists():
+                return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if CustomUser.objects.filter(email=email).exists():
+                return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user = CustomUser.objects.create_user(
+                username=username,
+                email=email,
+                password=user_data['password'],
+                phone_number=user_data.get('phone_number', ''),
+                first_name=user_data.get('first_name', ''),
+                last_name=user_data.get('last_name', ''),
+                is_admin=is_admin,
+            )
+
+            serializer = CustomUserSerializer(user)
+
+            try:
+                session_s3 = boto3.session.Session(
+                    region_name='us-east-1',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                )
+                s3 = session_s3.client('s3')
+
+                # Check if the bucket exists
+                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                try:
+                    s3.head_bucket(Bucket=bucket_name)
+                except s3.exceptions.ClientError as e:
+                    if e.response['Error']['Code'] == 'NoSuchBucket':
+                        # The bucket doesn't exist, create it
+                        s3.create_bucket(Bucket=bucket_name)
+
+                # Check if the folder exists
+                folder_key = f"user_folders/{username}/"
+                try:
+                    s3.head_object(Bucket=bucket_name, Key=folder_key)
+                except s3.exceptions.ClientError as e:
+                    if e.response['Error']['Code'] == '404':
+                        # The folder doesn't exist, create it
+                        s3.put_object(Bucket=bucket_name, Key=folder_key, Body='')
+                
+                images_folder_key = f"user_folders/{username}/images/"
+                try:
+                    s3.head_object(Bucket=bucket_name, Key=images_folder_key)
+                except ClientError as e:
+                    if e.response['Error']['Code'] == '404':
+                        # The 'images' folder doesn't exist, create it
+                        s3.put_object(Bucket=bucket_name, Key=images_folder_key, Body='')
+
+            except Exception as e:
+                print(f"Error creating S3 folder: {e}")
+
+            try:
+                print("Before sending email") 
+                # Your email-sending code here
+                # Send a welcome email to the user
+                subject = 'Welcome to WeFund Africa - Your Partner in Business Funding!'
+                # from_email = 'malikkashan08@gmail.com'
+                from_email = 'Funding@wefund.africa'
+                print(from_email)
+                to_email = [email]
+                # cc_email = ['hassanzamir47@gmail.com']
+                cc_email = ['applications@wefund.africa']
+
+                # You can customize the welcome message in the template
+                message = render_to_string('welcome_email_template.html', {'username': username})
+                plain_message = strip_tags(message)
+
+                msg = EmailMultiAlternatives(
+                    subject,
+                    plain_message,
+                    from_email,
+                    to_email,
+                    cc=cc_email
+                )
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+                print("After sending email")
+            except Exception as e:
+                print(f"Error sending email: {e}")
+
+            # Upload the image to S3 if provided
+            image = user_data.get('image')
+            if image:
+                s3 = boto3.client(
+                    's3',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                )
+                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                folder_key = f"user_folders/{username}/images/"
+
+                try:
+                    s3.head_object(Bucket=bucket_name, Key=folder_key)
+                except Exception as e:
+                    # The folder doesn't exist, create it
+                    s3.put_object(Bucket=bucket_name, Key=folder_key)
+
+                image_name = image.name.replace('.', '_')
+                # image_key = f"user_folders/{username}/profile_image_{user.id}_{image.name}"
+                image_key = f"user_folders/{username}/images/profile_image_{user.id}_{image_name}"
+
+
+                # Upload the image to S3
+                s3.upload_fileobj(image, bucket_name, image_key)
+
+                # Update the user's image field with the S3 URL
+                user.image = f"{bucket_name}/{image_key}"
+
+                user.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

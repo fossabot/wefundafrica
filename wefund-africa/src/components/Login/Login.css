@@ -47,6 +47,7 @@
     }
 
     #submit_button_login {
+        position: inherit;
         width: 400px;
         border: none;
         background: #3AA641;
@@ -56,7 +57,7 @@
         color: #F2F4F9;
         height: 40px;
         font-weight: bold;
-        margin-top: 15px;
+        margin-top: 30px;
     }
 
     #submit_button_login:hover {
@@ -181,9 +182,28 @@
     } */
 
 
+    /* button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
 
-
-
+    } */
+    .show_hide_pass {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        color: #D0D9F6;
+        background-color: none;
+        font-size: 20px;
+    }
 }
 
 @media (max-width: 500px) {
@@ -361,4 +381,17 @@
     /* .profile_image_title {
         color: #D0D9F6;
     } */
+
+    .show_hide_pass {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        color: #D0D9F6;
+        background-color: none;
+        font-size: 16px;
+    }
 }

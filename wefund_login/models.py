@@ -44,6 +44,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     po_value = models.CharField(max_length=30, blank=True)
     supplier_quote = models.CharField(max_length=30, blank=True)
 
+    is_admin = models.BooleanField(default=False)
+
 
 
     MONTHLY_REVENUE_CHOICES = [
@@ -54,6 +56,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
     
     monthly_revenue = models.PositiveIntegerField(choices=MONTHLY_REVENUE_CHOICES, default=0)
+
+    STATUS_CHOICES = [
+        ('In Progress', 'In Progress'),
+        ('Incomplete', 'Incomplete'),
+        ('Complete', 'Complete'),
+    ]
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='In Progress')
 
     objects = CustomUserManager()
 

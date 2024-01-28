@@ -18,6 +18,12 @@ const DashboardNavbar = () => {
                 <button className={`profile_button ${
                         location.pathname === "/user/profile" ? "active" : ""
                     }`} onClick={() => navigate("/user/profile")}>Profile</button>
+
+            {/* <button className={`profile_button ${
+                    location.pathname === "/user-details/:id" ? "active" : ""
+                    }`} onClick={() => navigate("/user-details/:id", { state: { selectedUser: userDetail } })}>
+                    User Detail
+                </button> */}
             </div>
 
             <div className="welcome_user">Welcome, {userDetail.username}</div>

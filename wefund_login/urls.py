@@ -1,8 +1,10 @@
 from django.urls import path, include
 from . import views
-from .views import MyTokenObtainPairView, register_user, update_user_details, FileUploadView, RetrieveImageView
-from .views import change_password, image_upload
+from .views import MyTokenObtainPairView, register_user, update_user_details, FileUploadView, RetrieveImageView, AdminUserDetailsView
+from .views import change_password, image_upload, adminapply
 from django.contrib.auth import views as auth_views
+
+# from .views import AdminUserDetailsView
 
 
 from rest_framework_simplejwt.views import (
@@ -17,7 +19,8 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 
-    path('register/', register_user, name='register_user'),
+    path('register/', register_user, name='register'),
+
     path('update-profile/', update_user_details, name='update_profile'),
 
     path('image-upload/',image_upload, name='image_upload'),
@@ -32,6 +35,14 @@ urlpatterns = [
     path('change_password/', change_password, name='change_password'),
 
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+
+
+
+
+    path('getusers/', AdminUserDetailsView, name='getusers'),
+    path('register-admin/', adminapply, name='register_admin'),
+
+
 
     # path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     # path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),

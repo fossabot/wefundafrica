@@ -10,6 +10,19 @@ import axios from "axios";
 import DashboardNavbar from "../Dashboard_Navbar/Dashboard_Navbar";
 
 
+const getStatusClass = (status) => {
+    switch (status) {
+        case 'In Progress':
+        return 'status-in-progress';
+        case 'Incomplete':
+        return 'status-incomplete';
+        case 'Complete':
+        return 'status-complete';
+        default:
+        return '';
+    }
+    };
+
 
 const UserProfile = () => {
 
@@ -27,6 +40,7 @@ const UserProfile = () => {
         supplier_quote: userDetail.supplier_quote,
         years_in_business: userDetail.years_in_business,
         monthly_revenue: userDetail.monthly_revenue || "0",
+        status: userDetail.status
     });
 
 
@@ -116,30 +130,6 @@ const UserProfile = () => {
     }, []);
 
 
-    // const [imageBase64Data, setImageBase64Data] = useState({});
-// const backendRoot = "http://127.0.0.1:8000";
-
-    // useEffect(() => {
-    //     const accessToken = JSON.parse(localStorage.getItem('authTokens')).access;
-    //     axios
-    //         .get(`${backendRoot}/retrieve_image/${userDetail.username}/`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${accessToken}`,
-    //             },
-    //         })
-    //         .then((response) => {
-    //             setImageBase64Data(response.data.images);
-    //             setIsLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching files:', error);
-    //             localStorage.removeItem('authTokens');
-    //             localStorage.removeItem('userDetail');
-    //             navigate('/login');
-    //         });
-    // }, []);
-
-
     const [authLoader, setAuthLoader] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -188,10 +178,7 @@ return (
         </div>
         <div className="dashboard_master_div">
         {isLoading ? ( 
-            // Conditionally render loader if isLoading is true
-            // <div className="loader-container">
             <div className="loader" />
-            // </div>
         ) : (
             <div className="user_profile_master_div">
             {userDetail && (
@@ -201,16 +188,8 @@ return (
                     <h2>Profile Detail</h2>
                     
                     <div className="profile_image_div">
-                        {/* <img className="profile_img" src={`${backendRoot}${userDetail.image}`} /> */}
                         <img className="profile_img" src={`data:image/png;base64,${imageBase64}`} alt="Profile" />
                     </div>
-
-
-
-                    {/* <div className="update_profile_button_div">
-                        <button className="update_picture_btn">Update Picture</button>
-                    </div> */}
-
 
                     <form id="inputform" onSubmit={handleSubmit}>
                     
@@ -225,24 +204,19 @@ return (
                         </button>
                     </form>
                     
-
-
-
-
-
                     <div className="profile_user_details">
                         <div className="single_line">Company Name: {updatedUserDetail.username}</div>
                         <div className="single_line">Email: {updatedUserDetail.email}</div>
                         <div className="single_line">Phone: {updatedUserDetail.phone_number}</div>
+                        {/* <div className="single_line">Status: {updatedUserDetail.status}</div> */}
+                        <div className='single_line'>
+                            Status: <div className={`single_line ${getStatusClass(updatedUserDetail.status)}`}>{updatedUserDetail.status}</div>
+                        </div>
                     </div>
                     </div>
-
-
                     <div className="border_master_div">
                     <div className="user_profile_border_line"></div>
                     </div>
-
-
                     <div className="user_profile_edit_div">
                     <h2>Edit Details:</h2>
                             

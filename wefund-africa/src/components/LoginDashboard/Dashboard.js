@@ -1,61 +1,3 @@
-// import Footer from "../Footer/Footer";
-// import Navbar from "../Navbar/Navbar";
-// import { useContext, useEffect, useState } from "react";
-// import "./Dashboard.css";
-// import DashboardNavbar from "../Dashboard_Navbar/Dashboard_Navbar";
-// import { BiLogOut } from "react-icons/bi";
-// import StaticNavBar from "../StaticNavBar/StaticNavBar";
-// import AppContext from "../utils/AppContext";
-// import FileUpload from "../FileUpload/FileUpload";
-// import { useLocation, useNavigate } from "react-router-dom";
-
-
-// const Dashboard = () => {
-
-//     let { userDetail } = useContext(AppContext);
-//     userDetail = JSON.parse(localStorage.getItem("userDetail"));
-//     console.log(userDetail)
-
-
-//     const [selectedFile, setSelectedFile] = useState(null);
-
-//     const handleFileChange = (file) => {
-//         setSelectedFile(file);
-//     };
-//     const navigate = useNavigate();
-//     const handleprofileclick = () => {
-//         navigate('/user/profile');
-//     };
-//     const location = useLocation();
-//     const isDashboardPage = location.pathname === '/user/dashboard';
-
-    
-
-//     return (
-//     <div className="Homepage_master_div">
-//         <div>
-//         <StaticNavBar />
-//         </div>
-//         <div>
-//             <DashboardNavbar />
-//         </div>
-//         <div className="dashboard_master_div">
-        
-//         <FileUpload onFileChange={handleFileChange} />
-
-//         </div>
-
-//         <Footer />
-//     </div>
-// );
-// };
-
-// export default Dashboard;
-
-
-
-
-
 import React, { useContext, useState, useEffect } from "react";
 import "./Dashboard.css";
 import DashboardNavbar from "../Dashboard_Navbar/Dashboard_Navbar";
@@ -64,6 +6,7 @@ import AppContext from "../utils/AppContext";
 import FileUpload from "../FileUpload/FileUpload";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import AdminDashboard from "../AdminDashboard/AdminDashboard";
 
 const Dashboard = () => {
     let { userDetail } = useContext(AppContext);
@@ -105,11 +48,18 @@ const Dashboard = () => {
                 <DashboardNavbar />
             </div>
             <div className="dashboard_master_div">
-                {isLoading ? ( // Render loader when isLoading is true
+                {isLoading ? (
                     <div className="loader"></div>
                 ) : (
-                    <FileUpload onFileChange={handleFileChange} />
+                <>
+                    {userDetail && !userDetail.is_admin ? (
+                        <FileUpload onFileChange={handleFileChange} />
+                    ) : (
+                        userDetail && userDetail.is_admin && <AdminDashboard />
+                    )}
+                </>
                 )}
+
             </div>
         </div>
     );
