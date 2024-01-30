@@ -7,13 +7,16 @@ import AppContext from "../utils/AppContext";
 import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import "../RegisterUser/RegisterUser.css";
 
 
 const LoginPage = () => {
 
-    let { loginUser } = useContext(AppContext);
+    let { loginUser, setErrorMessage, errorMessage } = useContext(AppContext);
 
     const [showPassword, setShowPassword] = useState(false);
+    const [shouldReload, setShouldReload] = useState(false);
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -30,6 +33,18 @@ const LoginPage = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+
+    const closePopup = () => {
+        setErrorMessage(null);
+        setShouldReload(true);
+    };
+    
+    useEffect(() => {
+        if (shouldReload) {
+            window.location.reload();
+        }
+    }, [shouldReload]);
 
     return (
     <div className="Homepage_master_div">
@@ -67,6 +82,16 @@ const LoginPage = () => {
         {/* {authloader ? <span id="authloader"></span> : <>LOGIN</>} */}
         Login
         </button>
+        {errorMessage && (
+            <div className="popup">
+                <div className="popup-content">
+                <span className="close-popup" onClick={closePopup}>
+                    &times;
+                </span>
+                <p>{errorMessage}</p>
+                </div>
+            </div>
+            )}
         <div className="signup_forgot">
         <div className="sign_up" onClick={signup}><span>Sign Up</span></div>
         <div className="forget_password" onClick={forgothandle}><span>Forgot Password</span></div>

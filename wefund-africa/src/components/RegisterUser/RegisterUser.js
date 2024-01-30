@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import StaticNavBar from "../StaticNavBar/StaticNavBar";
@@ -10,15 +10,13 @@ import { MdDoDisturbOff } from "react-icons/md";
 const ApplyNow = () => {
 
   const [authLoader, setAuthLoader] = useState(false);
-
   const [consentChecked, setConsentChecked] = useState(false);
-
   const [passwordStrengthError, setPasswordStrengthError] = useState("");
-
   const [passwordMatchError, setPasswordMatchError] = useState("");
-
   const [emailError, setEmailError] = useState("");
 
+  const [popupContent, setPopupContent] = useState(null);
+  const [shouldReload, setShouldReload] = useState(false);
 
   
   let navigate = useNavigate();
@@ -46,20 +44,23 @@ const ApplyNow = () => {
         console.log(data);
         console.log("before if condition");
         if (response.status === 201) {
-            console.log("User successfully register")
-            navigate("/login");
+          console.log("User successfully register")
+          navigate("/login");
+        } else if (response.status === 400 && data.email && data.email.length > 0) {
+          setPopupContent('Email Already Exist');
         } else {
           const errorData = await response.json();
         }
       } catch (error) {
         console.error("An error occurred:", error);
-      } 
+      } finally {
+        setAuthLoader(false);
+      }
     }
   };
 
   const handlePasswordChange = (e) => {
     const password = e.target.value;
-
     // Password strength criteria
     const hasCapitalLetter = /[A-Z]/.test(password);
     const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
@@ -92,6 +93,17 @@ const ApplyNow = () => {
     }
   };
 
+  const closePopup = () => {
+    setPopupContent(null);
+    setShouldReload(true);
+  };
+
+  useEffect(() => {
+    if (shouldReload) {
+      window.location.reload();
+    }
+  }, [shouldReload]);
+
 
   return (
     <div className="Homepage_master_div">
@@ -117,8 +129,18 @@ const ApplyNow = () => {
                   <input name="email" type="email" required="required" onChange={() => setEmailError("")} />
                   <span>Email</span>
                 </div>
-                {emailError && (
-                  <div className="email-error">{emailError}</div>
+                {/* {emailError && (
+                    <div className="email-error">{emailError}</div>
+                )} */}
+                {popupContent && (
+                  <div className="popup">
+                    <div className="popup-content">
+                      <span className="close-popup" onClick={closePopup}>
+                        &times;
+                      </span>
+                      <p>{popupContent}</p>
+                    </div>
+                  </div>
                 )}
               </div>
           </div>
@@ -171,8 +193,6 @@ const ApplyNow = () => {
             </div>
           </div>
         </div>
-
-
         <div className="phone_year">
           <div className="inputbox">
           <input name="po_value" type="tel" required="required" />
@@ -187,7 +207,6 @@ const ApplyNow = () => {
             </div>
           </div>
         </div>
-
           {/* Add monthly_revenue select */}
           <div className="inputbox">
             <select name="monthly_revenue" required="required">
@@ -200,8 +219,6 @@ const ApplyNow = () => {
             <span>Monthly Revenue</span>
             </div>
           </div>
-
-
           <div className="checkbox_label">
             <input type="checkbox" id="consentCheckbox" 
             checked={consentChecked}
@@ -212,7 +229,6 @@ const ApplyNow = () => {
                 per WeFund Africa Privacy Policy.
             </label>
           </div>
-
           <div className="register_button">
             <button id="submit_button_login" type="submit" disabled={!consentChecked || authLoader}>
               {authLoader ? <span id="authloader"></span> : "Register"}

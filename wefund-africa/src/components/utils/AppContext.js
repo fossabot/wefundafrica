@@ -60,6 +60,7 @@ export const Provider = ({ children }) => {
 
       let data = await response.json();
       if (response.status === 200) {
+
         setAuthloader(false);
 
         tokensToStore = {
@@ -85,9 +86,12 @@ export const Provider = ({ children }) => {
         setUser(jwt_decode(tokensToStore.access));
         navigate("/user/dashboard");
 
+      } else if (response.status === 401){
+        setErrorMessage('Password is incorrect');
       } else {
         alert("Something went wrong!");
       }
+      setAuthloader(false);
     }
   };
 
@@ -154,6 +158,8 @@ export const Provider = ({ children }) => {
     userDetail: userDetail,
     setUserDetail: setUserDetail,
     tokensToStore: tokensToStore,
+    errorMessage: errorMessage,
+    setErrorMessage: setErrorMessage,
   };
 
 

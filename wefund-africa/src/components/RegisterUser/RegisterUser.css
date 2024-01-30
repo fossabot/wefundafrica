@@ -94,6 +94,38 @@ input:-webkit-autofill {
 }
 
 
+.popup {
+    display: flex;
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+  }
+  
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .close-popup {
+    cursor: pointer;
+    align-self: flex-end;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  
+
+
+
+
 @media (max-width: 500px) {
     .inputbox {
         display: flex;
@@ -116,6 +148,33 @@ input:-webkit-autofill {
         display: flex;
         margin-left: auto;
     }
+    .popup {
+        display: flex;
+        z-index: 1;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
+      }
+      
+      .popup-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .close-popup {
+        cursor: pointer;
+        align-self: flex-end;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
 }
 
 

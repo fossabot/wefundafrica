@@ -100,8 +100,13 @@ def register_user(request):
             if CustomUser.objects.filter(username=username).exists():
                 return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if CustomUser.objects.filter(email=email).exists():
-                return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            # if CustomUser.objects.filter(email=email).exists():
+            #     return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            existing_email_user = CustomUser.objects.filter(email=email).first()
+            if existing_email_user:
+                return Response({'error': 'Email already exists.', 'user_id': existing_email_user.id}, status=status.HTTP_400_BAD_REQUEST)
             
             # password = user_data['password']
 
